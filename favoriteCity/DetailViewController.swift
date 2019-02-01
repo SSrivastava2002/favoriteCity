@@ -11,16 +11,17 @@ import UIKit
 class DetailViewController: UIViewController {
 
     @IBOutlet weak var detailDescriptionLabel: UILabel!
-
-
-    func configureView() {
-        // Update the user interface for the detail item.
-        if let detail = detailItem {
-            if let label = detailDescriptionLabel {
-                label.text = detail.description
-            }
+    @IBOutlet weak var cityTextField: UITextField!
+    @IBOutlet weak var StateTextField: UITextField!
+    @IBOutlet weak var PopulationtextField: UITextField!
+    @IBOutlet weak var imageView: UIImageView!
+    var detailItem: City? {
+        didSet {
+            // Update the view.
+            configureView()
         }
     }
+   
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,13 +29,25 @@ class DetailViewController: UIViewController {
         configureView()
     }
 
-    var detailItem: NSDate? {
-        didSet {
-            // Update the view.
-            configureView()
+    func configureView() {
+        // Update the user interface for the detail item.
+        if let city = self.detailItem {
+            if cityTextField != nil {
+                cityTextField.text = city.name
+                StateTextField.text = city.state
+                PopulationtextField.text = String(city.population)
+                imageView.image = UIImage(data: city.image)
+            }
         }
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        if let city = self.detailItem{
+            city.name = cityTextField.text!
+            city.state = StateTextField.text!
+            city.population = Int(PopulationtextField.text!)!
+        }
+    }
 
 }
 
